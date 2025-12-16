@@ -159,6 +159,114 @@ static char *syscall_names[] = {
 [SYS_trace]   "trace",
 };
 
+
+// Función para mostrar argumentos de syscall
+void
+print_syscall_args(int num)
+{
+  int arg0, arg1, arg2;
+  char *str;
+  
+  switch(num) {
+    case SYS_fork:
+    case SYS_exit:
+    case SYS_wait:
+    case SYS_getpid:
+    case SYS_uptime:
+      cprintf("()");
+      break;
+    
+    case SYS_kill:
+    case SYS_sleep:
+    case SYS_close:
+    case SYS_dup:
+      if(argint(0, &arg0) >= 0)
+        cprintf("(%d)", arg0);
+      else
+        cprintf("(?)");
+      break;
+    
+    case SYS_sbrk:
+      if(argint(0, &arg0) >= 0)
+        cprintf("(%d)", arg0);
+      else
+        cprintf("(?)");
+      break;
+    
+    case SYS_read:
+    case SYS_write:
+      if(argint(0, &arg0) >= 0 && argint(2, &arg2) >= 0)
+        cprintf("(%d, buf, %d)", arg0, arg2);
+      else
+        cprintf("(?, ?, ?)");
+      break;
+    
+    case SYS_open:
+      if(argstr(0, &str) >= 0 && argint(1, &arg1) >= 0)
+        cprintf("(\"%s\", %d)", str, arg1);
+      else
+        cprintf("(?, ?)");
+      break;
+    
+    case SYS_chdir:
+    case SYS_unlink:
+    case SYS_mkdir:
+      if(argstr(0, &str) >= 0)
+        cprintf("(\"%s\")", str);
+      else
+        cprintf("(?)");
+      break;
+    
+    case SYS_mknod:
+      if(argstr(0, &str) >= 0 && argint(1, &arg1) >= 0 && argint(2, &arg2) >= 0)
+        cprintf("(\"%s\", %d, %d)", str, arg1, arg2);
+      else
+        cprintf("(?, ?, ?)");
+      break;
+    
+    case SYS_link:
+      if(argstr(0, &str) >= 0) {
+        char *str2;
+        if(argstr(1, &str2) >= 0)
+          cprintf("(\"%s\", \"%s\")", str, str2);
+        else
+          cprintf("(\"%s\", ?)", str);
+      } else {
+        cprintf("(?, ?)");
+      }
+      break;
+    
+    case SYS_exec:
+      if(argstr(0, &str) >= 0)
+        cprintf("(\"%s\", argv)", str);
+      else
+        cprintf("(?, ?)");
+      break;
+    
+    case SYS_pipe:
+      cprintf("(pipefd)");
+      break;
+    
+    case SYS_fstat:
+      if(argint(0, &arg0) >= 0)
+        cprintf("(%d, stat)", arg0);
+      else
+        cprintf("(?, ?)");
+      break;
+      
+    case SYS_trace:
+      if(argint(0, &arg0) >= 0)
+        cprintf("(%d)", arg0);
+      else
+        cprintf("(?)");
+      break;
+    
+    default:
+      cprintf("(...)");
+      break;
+  }
+}
+
 void
 syscall(void)
 {
@@ -171,6 +279,7 @@ syscall(void)
     if(syscall_trace) {
       cprintf("[PID %d] %s: %s", curproc->pid, curproc->name, 
               num < NELEM(syscall_names) ? syscall_names[num] : "unknown");
+      print_syscall_args(num);
       cprintf("\n");
     }
 
