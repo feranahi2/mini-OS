@@ -167,6 +167,13 @@ syscall(void)
 
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    // Si esta activo el trace se mostrara el syscall
+    if(syscall_trace) {
+      cprintf("[PID %d] %s: %s", curproc->pid, curproc->name, 
+              num < NELEM(syscall_names) ? syscall_names[num] : "unknown");
+      cprintf("\n");
+    }
+
     curproc->tf->eax = syscalls[num]();
   } else {
     cprintf("%d %s: unknown sys call %d\n",
