@@ -89,3 +89,19 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// Declaración externa de la variable global
+extern int syscall_trace;
+
+// Nueva syscall para activar/desactivar el trace
+int
+sys_trace(void)
+{
+  int enable;
+  
+  if(argint(0, &enable) < 0)
+    return -1;
+    
+  syscall_trace = enable ? 1 : 0;
+  return 0;
+}
