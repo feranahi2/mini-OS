@@ -56,3 +56,6 @@ struct proc {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+
+int count_active_procs(void);

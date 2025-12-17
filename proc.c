@@ -532,3 +532,20 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int count_active_procs(void)
+{
+  struct proc *p;
+  int count = 0;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state == RUNNING || p->state == RUNNABLE)
+      count++;
+  }
+  release(&ptable.lock);
+
+  return count;
+}
+
+
