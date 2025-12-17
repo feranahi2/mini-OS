@@ -133,3 +133,10 @@ sys_syscallstats(void)
   // Retornar el contador de la syscall específica
   return get_syscall_count(syscall_num);
 }
+
+int
+sys_schedinfo(void)
+{
+  print_schedinfo();
+  return 0;
+}

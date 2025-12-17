@@ -113,6 +113,8 @@ extern int sys_uptime(void);
 extern int sys_trace(void);
 extern int sys_getactiveprocs(void);
 extern int sys_syscallstats(void);
+extern int sys_schedinfo(void);
+
 
 
 static int (*syscalls[])(void) = {
@@ -140,6 +142,8 @@ static int (*syscalls[])(void) = {
 [SYS_trace]   sys_trace,
 [SYS_syscallstats] sys_syscallstats,
 [SYS_getactiveprocs] sys_getactiveprocs,
+[SYS_schedinfo] sys_schedinfo,
+
 };
 
 static char *syscall_names[] = {
@@ -166,6 +170,9 @@ static char *syscall_names[] = {
 [SYS_close]   "close",
 [SYS_trace]   "trace",
 [SYS_syscallstats] "syscallstats",
+[SYS_getactiveprocs] "getactiveprocs",
+[SYS_schedinfo] "schedinfo",
+
 };
 
 
