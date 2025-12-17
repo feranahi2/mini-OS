@@ -311,7 +311,7 @@ syscall(void)
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     // Incrementar el contador de esta syscall
-    if(num < 24)
+    if(num < 26)
       syscall_counts[num]++;
 
     // Si esta activo el trace se mostrara el syscall
