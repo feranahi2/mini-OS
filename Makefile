@@ -177,6 +177,7 @@ UPROGS=\
 	_mkdir\
 	_rm\
 	_strace\
+	_syscallstats\
 	_sh\
 	_stressfs\
 	_usertests\
