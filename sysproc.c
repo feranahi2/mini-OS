@@ -105,3 +105,8 @@ sys_trace(void)
   syscall_trace = enable ? 1 : 0;
   return 0;
 }
+
+int sys_getactiveprocs(void)
+{
+   return count_active_procs();
+}

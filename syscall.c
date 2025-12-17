@@ -11,6 +11,7 @@
 int syscall_trace = 0;
 
 
+
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -108,6 +109,7 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_trace(void);
+extern int sys_getactiveprocs(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -132,6 +134,7 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
+[SYS_getactiveprocs] sys_getactiveprocs,
 };
 
 static char *syscall_names[] = {
@@ -290,3 +293,7 @@ syscall(void)
     curproc->tf->eax = -1;
   }
 }
+
+
+
+
