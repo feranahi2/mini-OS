@@ -106,6 +106,11 @@ sys_trace(void)
   return 0;
 }
 
+int sys_getactiveprocs(void)
+{
+   return count_active_procs();
+}
+
 // Declaraciones externas para syscallstats
 extern int get_syscall_count(int);
 extern char* get_syscall_name(int);

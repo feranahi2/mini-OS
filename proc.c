@@ -62,7 +62,9 @@ myproc(void) {
   c = mycpu();
   p = c->proc;
   popcli();
+  
   return p;
+
 }
 
 //PAGEBREAK: 32
@@ -88,6 +90,8 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+
+  p->ctx_switches = 0; //inicializacion
 
   release(&ptable.lock);
 
@@ -343,6 +347,8 @@ scheduler(void)
       switchuvm(p);
       p->state = RUNNING;
 
+      p->ctx_switches++;
+
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
@@ -532,3 +538,52 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int count_active_procs(void)
+{
+  struct proc *p;
+  int count = 0;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state == RUNNING || p->state == RUNNABLE)
+      count++;
+  }
+  release(&ptable.lock);
+
+  return count;
+}
+
+
+
+void
+print_schedinfo(void)
+{
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  cprintf("PID\tESTADO\t\tCTX\tNOMBRE\n");
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state == UNUSED)
+      continue;
+
+    cprintf("%d\t", p->pid);
+
+    if(p->state == RUNNING)   cprintf("RUNNING\t\t");
+    else if(p->state == RUNNABLE) cprintf("RUNNABLE\t");
+    else if(p->state == SLEEPING) cprintf("SLEEPING\t");
+    else cprintf("OTRO\t\t");
+
+    cprintf("%d\t%s\n", p->ctx_switches, p->name);
+  }
+  release(&ptable.lock);
+}
+
+
+
+
+
+
+
+
+
