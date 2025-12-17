@@ -44,7 +44,7 @@ main(int argc, char *argv[])
     printf(1, "------------------------------------\n");
     
     // Mostrar todas las syscalls (1-23)
-    for(i = 1; i <= 23; i++) {
+    for(i = 1; i <= 25; i++) {
       count = syscallstats(i);
         char *name = syscall_names[i];
         
@@ -69,7 +69,7 @@ main(int argc, char *argv[])
     // Con parámetro: mostrar una syscall específica
     syscall_num = atoi(argv[1]);
     
-    if(syscall_num < 1 || syscall_num > 23) {
+    if(syscall_num < 1 || syscall_num > 25) {
       printf(2, "Error: número de syscall inválido\n");
       printf(2, "Uso: syscallstats [numero_syscall]\n");
       printf(2, "  Números válidos: 1-23\n");
