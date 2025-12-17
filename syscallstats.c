@@ -38,28 +38,39 @@ main(int argc, char *argv[])
 
   if(argc == 1) {
     // Sin parámetros: mostrar todas las syscalls
-    printf(1, "\n=== ESTADÍSTICAS DE LLAMADAS AL SISTEMA ===\n\n");
-    printf(1, "%-15s %10s\n", "SYSCALL", "INVOCACIONES");
-    printf(1, "----------------------------------------\n");
+    printf(1, "\n=== ESTADISTICAS DE LLAMADAS AL SISTEMA ===\n\n");
+    printf(1, "SYSCALL          INVOCACIONES\n");
+    printf(1, "------------------------------------\n");
     
     for(i = 1; i <= 22; i++) {
       count = syscallstats(i);
       if(count > 0) {  // Solo mostrar syscalls que se han usado
-        printf(1, "%-15s %10d\n", 
-               i < 22 ? syscall_names[i] : "unknown", count);
+        char *name = i < 22 ? syscall_names[i] : "unknown";
+        printf(1, "%s", name);
+        
+        // Agregar espacios para alinear (simple padding)
+        int len = 0;
+        char *p = name;
+        while(*p++) len++;
+        while(len < 17) {
+          printf(1, " ");
+          len++;
+        }
+        
+        printf(1, "%d\n", count);
       }
     }
     
-    printf(1, "----------------------------------------\n");
+    printf(1, "------------------------------------\n");
     
     // Mostrar también trace y syscallstats si se han usado
     count = syscallstats(SYS_trace);
     if(count > 0)
-      printf(1, "%-15s %10d\n", "trace", count);
+      printf(1, "trace            %d\n", count);
     
     count = syscallstats(SYS_syscallstats);
     if(count > 0)
-      printf(1, "%-15s %10d\n", "syscallstats", count);
+      printf(1, "syscallstats     %d\n", count);
     
     printf(1, "\n");
     
