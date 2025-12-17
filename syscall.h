@@ -23,3 +23,4 @@
 #define SYS_trace  22
 #define SYS_syscallstats 23
 #define SYS_getactiveprocs 24
+#define SYS_schedinfo 25
