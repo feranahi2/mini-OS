@@ -27,6 +27,7 @@ char *syscall_names[] = {
   [SYS_mkdir]   "mkdir",
   [SYS_close]   "close",
   [SYS_trace]   "trace",
+  [SYS_syscallstats] "syscallstats",
 };
 
 int
@@ -42,10 +43,12 @@ main(int argc, char *argv[])
     printf(1, "SYSCALL          INVOCACIONES\n");
     printf(1, "------------------------------------\n");
     
-    for(i = 1; i <= 22; i++) {
+    // Mostrar todas las syscalls (1-23)
+    for(i = 1; i <= 23; i++) {
       count = syscallstats(i);
       if(count > 0) {  // Solo mostrar syscalls que se han usado
-        char *name = i < 22 ? syscall_names[i] : "unknown";
+        char *name = syscall_names[i];
+        
         printf(1, "%s", name);
         
         // Agregar espacios para alinear (simple padding)
@@ -62,16 +65,6 @@ main(int argc, char *argv[])
     }
     
     printf(1, "------------------------------------\n");
-    
-    // Mostrar también trace y syscallstats si se han usado
-    count = syscallstats(SYS_trace);
-    if(count > 0)
-      printf(1, "trace            %d\n", count);
-    
-    count = syscallstats(SYS_syscallstats);
-    if(count > 0)
-      printf(1, "syscallstats     %d\n", count);
-    
     printf(1, "\n");
     
   } else if(argc == 2) {
@@ -89,8 +82,7 @@ main(int argc, char *argv[])
     count = syscallstats(syscall_num);
     printf(1, "Syscall #%d (%s): %d invocaciones\n", 
            syscall_num,
-           syscall_num < 22 ? syscall_names[syscall_num] : 
-           syscall_num == 22 ? "trace" : "syscallstats",
+           syscall_names[syscall_num],
            count);
   } else {
     printf(2, "Uso: syscallstats [numero_syscall]\n");
