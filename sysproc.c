@@ -105,3 +105,26 @@ sys_trace(void)
   syscall_trace = enable ? 1 : 0;
   return 0;
 }
+
+// Declaraciones externas para syscallstats
+extern int get_syscall_count(int);
+extern char* get_syscall_name(int);
+
+// Nueva syscall para obtener estadísticas de syscalls
+// Si recibe -1, devuelve el total de syscalls definidas (22)
+// Si recibe un número válido (1-22), devuelve el contador de esa syscall
+int
+sys_syscallstats(void)
+{
+  int syscall_num;
+  
+  if(argint(0, &syscall_num) < 0)
+    return -1;
+  
+  // Si es -1, retornar el número total de syscalls
+  if(syscall_num == -1)
+    return 22;  // Total de syscalls sin contar trace y syscallstats
+  
+  // Retornar el contador de la syscall específica
+  return get_syscall_count(syscall_num);
+}
