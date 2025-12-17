@@ -176,6 +176,16 @@ get_syscall_count(int syscall_num)
   return -1;
 }
 
+// Función para obtener el nombre de una syscall
+char*
+get_syscall_name(int syscall_num)
+{
+  if(syscall_num >= 0 && syscall_num < NELEM(syscall_names) && syscall_names[syscall_num])
+    return syscall_names[syscall_num];
+  return "unknown";
+}
+
+
 // Función para mostrar argumentos de syscall
 void
 print_syscall_args(int num)
