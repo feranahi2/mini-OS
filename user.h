@@ -42,3 +42,6 @@ int atoi(const char*);
 
 
 int getactiveprocs(void);
+
+// Prototipo de la syscall schedinfo accesible desde el espacio de usuario.
+int schedinfo(void);
