@@ -11,7 +11,7 @@
 int syscall_trace = 0;
 
 // Array de contadores para cada syscall
-static int syscall_counts[24];
+static int syscall_counts[26];
 
 
 // User code makes a system call with INT T_SYSCALL.
@@ -180,7 +180,7 @@ static char *syscall_names[] = {
 int
 get_syscall_count(int syscall_num)
 {
-  if(syscall_num >= 0 && syscall_num < 24)
+  if(syscall_num >= 0 && syscall_num < 26)
     return syscall_counts[syscall_num];
   return -1;
 }

@@ -28,6 +28,8 @@ char *syscall_names[] = {
   [SYS_close]   "close",
   [SYS_trace]   "trace",
   [SYS_syscallstats] "syscallstats",
+  [SYS_getactiveprocs] "getactiveprocs",
+  [SYS_schedinfo] "schedinfo",
 };
 
 int
