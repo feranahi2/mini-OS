@@ -110,6 +110,8 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_trace(void);
+extern int sys_syscallstats(void);
+
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -134,6 +136,8 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
+[SYS_syscallstats] sys_syscallstats,
+
 };
 
 static char *syscall_names[] = {
@@ -159,8 +163,18 @@ static char *syscall_names[] = {
 [SYS_mkdir]   "mkdir",
 [SYS_close]   "close",
 [SYS_trace]   "trace",
+[SYS_syscallstats] "syscallstats",
 };
 
+
+// Función para obtener el contador de una syscall específica
+int
+get_syscall_count(int syscall_num)
+{
+  if(syscall_num >= 0 && syscall_num < 24)
+    return syscall_counts[syscall_num];
+  return -1;
+}
 
 // Función para mostrar argumentos de syscall
 void
