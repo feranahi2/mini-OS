@@ -10,6 +10,8 @@
 // Variable global para controlar el syscall trace
 int syscall_trace = 0;
 
+// Array de contadores para cada syscall
+static int syscall_counts[24];
 
 
 // User code makes a system call with INT T_SYSCALL.
@@ -110,6 +112,8 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_trace(void);
 extern int sys_getactiveprocs(void);
+extern int sys_syscallstats(void);
+
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -134,6 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
+[SYS_syscallstats] sys_syscallstats,
 [SYS_getactiveprocs] sys_getactiveprocs,
 };
 
@@ -160,7 +165,27 @@ static char *syscall_names[] = {
 [SYS_mkdir]   "mkdir",
 [SYS_close]   "close",
 [SYS_trace]   "trace",
+[SYS_syscallstats] "syscallstats",
 };
+
+
+// Función para obtener el contador de una syscall específica
+int
+get_syscall_count(int syscall_num)
+{
+  if(syscall_num >= 0 && syscall_num < 24)
+    return syscall_counts[syscall_num];
+  return -1;
+}
+
+// Función para obtener el nombre de una syscall
+char*
+get_syscall_name(int syscall_num)
+{
+  if(syscall_num >= 0 && syscall_num < NELEM(syscall_names) && syscall_names[syscall_num])
+    return syscall_names[syscall_num];
+  return "unknown";
+}
 
 
 // Función para mostrar argumentos de syscall
@@ -278,6 +303,10 @@ syscall(void)
 
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    // Incrementar el contador de esta syscall
+    if(num < 24)
+      syscall_counts[num]++;
+
     // Si esta activo el trace se mostrara el syscall
     if(syscall_trace) {
       cprintf("[PID %d] %s: %s", curproc->pid, curproc->name, 
