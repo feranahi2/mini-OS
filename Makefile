@@ -167,6 +167,7 @@ mkfs: mkfs.c fs.h
 .PRECIOUS: %.o
 
 UPROGS=\
+	_schedinfo\
         _uptime\
 	_cat\
 	_echo\
