@@ -46,7 +46,6 @@ main(int argc, char *argv[])
     // Mostrar todas las syscalls (1-23)
     for(i = 1; i <= 23; i++) {
       count = syscallstats(i);
-      if(count > 0) {  // Solo mostrar syscalls que se han usado
         char *name = syscall_names[i];
         
         printf(1, "%s", name);
@@ -61,7 +60,6 @@ main(int argc, char *argv[])
         }
         
         printf(1, "%d\n", count);
-      }
     }
     
     printf(1, "------------------------------------\n");
